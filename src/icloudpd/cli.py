@@ -208,6 +208,14 @@ def add_options_for_user(parser: argparse.ArgumentParser) -> argparse.ArgumentPa
         default=None,
     )
     cloned.add_argument(
+        "--keep-favorites",
+        help="Prevent photos/videos marked as favorites from being deleted from iCloud, "
+        + "even if other arguments (like --delete-after-download or --keep-icloud-recent-days) "
+        + "would otherwise delete them.",
+        action="store_true",
+        default=False,
+    )
+    cloned.add_argument(
         "--dry-run",
         help="Do not modify the local system or iCloud",
         action="store_true",
@@ -463,6 +471,7 @@ def map_to_config(user_ns: argparse.Namespace) -> UserConfig:
         notification_script=user_ns.notification_script,
         delete_after_download=user_ns.delete_after_download,
         keep_icloud_recent_days=user_ns.keep_icloud_recent_days,
+        keep_favorites=user_ns.keep_favorites,
         dry_run=user_ns.dry_run,
         keep_unicode_in_filenames=user_ns.keep_unicode_in_filenames,
         live_photo_mov_filename_policy=LivePhotoMovFilenamePolicy(

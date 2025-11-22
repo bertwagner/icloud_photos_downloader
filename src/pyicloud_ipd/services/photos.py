@@ -1085,6 +1085,14 @@ class PhotoAsset:
         return dt
 
     @property
+    def is_favorite(self) -> bool:
+        """Check if the photo/video is marked as a favorite."""
+        fields = self._asset_record.get("fields", {})
+        if "isFavorite" in fields:
+            return fields["isFavorite"].get("value") == 1
+        return False
+
+    @property
     def dimensions(self) -> Tuple[int, int]:
         return (
             self._master_record["fields"]["resOriginalWidth"]["value"],
