@@ -42,6 +42,7 @@ class _DefaultConfig:
     notification_script: pathlib.Path | None
     delete_after_download: bool
     keep_icloud_recent_days: int | None
+    keep_favorites: bool
     dry_run: bool
     keep_unicode_in_filenames: bool
     live_photo_mov_filename_policy: LivePhotoMovFilenamePolicy

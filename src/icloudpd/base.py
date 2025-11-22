@@ -1440,6 +1440,22 @@ def core_single_run(
                                 else:
                                     should_delete = True
 
+                            # Check if we should skip deletion due to --keep-favorites
+                            if should_delete and user_config.keep_favorites and item.is_favorite:
+                                filename_cleaner_for_debug = build_filename_cleaner(
+                                    user_config.keep_unicode_in_filenames
+                                )
+                                debug_filename = build_filename_with_policies(
+                                    user_config.file_match_policy,
+                                    filename_cleaner_for_debug,
+                                    item,
+                                )
+                                logger.debug(
+                                    "Skipping deletion of %s as it is marked as a favorite",
+                                    debug_filename,
+                                )
+                                should_delete = False
+
                             if should_delete:
                                 # Create filename cleaner and builder for delete operations
                                 filename_cleaner_for_delete = build_filename_cleaner(
