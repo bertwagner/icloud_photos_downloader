@@ -248,7 +248,14 @@ def request_2sa(icloud: PyiCloudService, logger: logging.Logger) -> TwoFactorAut
 
 def request_2fa(icloud: PyiCloudService, logger: logging.Logger) -> TwoFactorAuthResult:
     """Request two-factor authentication."""
-    devices = icloud.get_trusted_phone_numbers()
+    from pyicloud_ipd.response_types import TrustedPhoneNumbersSuccess
+
+    devices_result = icloud.get_trusted_phone_numbers()
+    match devices_result:
+        case TrustedPhoneNumbersSuccess(devices):
+            pass  # Continue with devices
+        case _:
+            return TwoFactorAuthFailed("Failed to get trusted phone numbers")
 
     # Trigger push notification to trusted devices before prompting for code.
     # Apple's auth flow (2026+) requires a PUT to /verify/trusteddevice/securitycode
