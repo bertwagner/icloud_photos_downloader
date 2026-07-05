@@ -128,16 +128,25 @@ def build_metadata(asset_record: dict[str, Any]) -> XMPMetadata:
         )
 
     if "locationEnc" in asset_record["fields"]:
-        location = plistlib.loads(
-            base64.b64decode(asset_record["fields"]["locationEnc"]["value"]),
-        )
-        gps_altitude = location.get("alt")
-        gps_latitude = location.get("lat")
-        gps_longitude = location.get("lon")
-        gps_speed = location.get("speed")
-        gps_timestamp = (
-            location.get("timestamp") if isinstance(location.get("timestamp"), datetime) else None
-        )
+        try:
+            location = plistlib.loads(
+                base64.b64decode(asset_record["fields"]["locationEnc"]["value"]),
+            )
+            gps_altitude = location.get("alt")
+            gps_latitude = location.get("lat")
+            gps_longitude = location.get("lon")
+            gps_speed = location.get("speed")
+            gps_timestamp = (
+                location.get("timestamp") if isinstance(location.get("timestamp"), datetime) else None
+            )
+        except plistlib.InvalidFileException:
+            gps_altitude, gps_latitude, gps_longitude, gps_speed, gps_timestamp = (
+                None,
+                None,
+                None,
+                None,
+                None,
+            )
     else:
         gps_altitude, gps_latitude, gps_longitude, gps_speed, gps_timestamp = (
             None,
